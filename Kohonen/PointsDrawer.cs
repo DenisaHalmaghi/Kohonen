@@ -15,11 +15,6 @@ namespace Kohonen
             this.canvas = control;
         }
 
-        public void clean()
-        {
-            canvas.Graphics.Clear(Color.White);
-        }
-
         public void draw(List<(int X, int Y, Color color)> points)
         {
             canvas.Graphics.DrawRectangle(new Pen(Color.Black), 0, 0, Constants.MAX * 2 + 1, Constants.MAX * 2 + 1);
@@ -33,6 +28,29 @@ namespace Kohonen
 
         public void draw(Neuron[,] neurons)
         {
+            var neighbourService = new NeighbourService(neurons);
+            var pen = new Pen(Color.BlueViolet);
+            Neuron neuron;
+
+            var length = neurons.GetLength(0);
+
+            for (int i = 0; i < neurons.GetLength(0); i++)
+            {
+                for (int j = 0; j < neurons.GetLength(0); j++)
+                {
+                    neuron = neurons[i, j];
+                    var neighbours = neighbourService.upperAndRightNeighbours((i, j));
+
+                    foreach (var neighbour in neighbours)
+                    {
+                        canvas.Graphics.DrawLine(
+                            pen,
+                            new Point(converter.Ox(neuron.X), converter.Oy(neuron.Y)),
+                            new Point(converter.Ox(neighbour.X), converter.Oy(neighbour.Y))
+                        );
+                    }
+                }
+            }
             /*var pointSize = large ? 8 : 2;
             canvas.Graphics.DrawRectangle(new Pen(Color.Black), 0, 0, Constants.MAX * 2 + 1, Constants.MAX * 2 + 1);
 

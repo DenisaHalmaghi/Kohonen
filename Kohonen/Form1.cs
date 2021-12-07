@@ -15,7 +15,7 @@ namespace Kohonen
         List<(int X, int Y, Color color)> points;
         Neuron[,] neurons;
         int currentEpoch = 0;
-        const int NR_NEURONS = 10;
+        const int NR_NEURONS = 11;
         const int TOTAL_EPOCHS = 10;
         const double ALPHA_THRESHOLD = 0.001;
         double alpha;

@@ -13,12 +13,48 @@ namespace Kohonen
         {
             neurons = _neurons;
         }
-        public void neighbours(Neuron neuron, int radius)
+        public List<Neuron> neighbours((int row, int column) matrixIndexes, int radius)
         {
-            var neighbours = from x in Enumerable.Range(neuron.X - 1, radius)
-                             from y in Enumerable.Range(neuron.Y - 1, radius)
-                             where x >= 0 && y >= 0 && x < neurons.GetLength(0) && y < neurons.GetLength(1)
-                             select new { x, y };
+            radius--;
+
+            var neighbours = new List<Neuron>();
+
+            var startRow = Math.Max(0, matrixIndexes.row - radius);
+            var endRow = Math.Min(neurons.GetLength(0) - 1, matrixIndexes.row + radius);
+
+            var startColumn = Math.Max(0, matrixIndexes.column - radius);
+            var endColumn = Math.Min(neurons.GetLength(0) - 1, matrixIndexes.column + radius);
+
+
+            for (int i = startRow; i <= endRow; i++)
+            {
+                for (int j = startColumn; j <= endColumn; j++)
+                {
+                    //do not include the neuron itself
+                    if (i == matrixIndexes.row && j == matrixIndexes.column)
+                    {
+                        continue;
+                    }
+                    neighbours.Add(neurons[i, j]);
+                }
+            }
+
+            return neighbours;
+        }
+
+        public List<Neuron> upperAndRightNeighbours((int row, int column) matrixIndexes)
+        {
+            var neighbours = new List<Neuron>();
+
+            var startRow = Math.Max(0, matrixIndexes.row - 1);
+            var endColumn = Math.Min(neurons.GetLength(0) - 1, matrixIndexes.column + 1);
+
+            //upper neighbour
+            neighbours.Add(neurons[startRow, matrixIndexes.column]);
+            //right neighbour
+            neighbours.Add(neurons[matrixIndexes.row, endColumn]);
+
+            return neighbours;
         }
     }
 }

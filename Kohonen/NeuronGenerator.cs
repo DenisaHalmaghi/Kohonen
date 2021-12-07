@@ -17,7 +17,7 @@ namespace Kohonen
         {
             var neurons = new Neuron[numberOfNeurons, numberOfNeurons];
 
-            var step = Constants.MAX / numberOfNeurons;
+            var step = 2 * Constants.MAX / (numberOfNeurons - 1);
 
             for (int i = 0; i < numberOfNeurons; i++)
             {
