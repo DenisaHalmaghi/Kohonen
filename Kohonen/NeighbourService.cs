@@ -30,11 +30,6 @@ namespace Kohonen
             {
                 for (int j = startColumn; j <= endColumn; j++)
                 {
-                    //do not include the neuron itself
-                    if (i == matrixIndexes.row && j == matrixIndexes.column)
-                    {
-                        continue;
-                    }
                     neighbours.Add(neurons[i, j]);
                 }
             }

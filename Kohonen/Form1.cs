@@ -12,14 +12,14 @@ namespace Kohonen
 {
     public partial class Form1 : Form
     {
-        List<(int X, int Y, Color color)> points;
+        List<(int X, int Y)> points;
         Neuron[,] neurons;
         int currentEpoch = 0;
         const int NR_NEURONS = 11;
         const int TOTAL_EPOCHS = 10;
         const double ALPHA_THRESHOLD = 0.001;
         double alpha;
-        double V;
+        int V;
 
         private void updateAlpha()
         {
@@ -30,7 +30,7 @@ namespace Kohonen
         private void updateV()
         {
             double power = (double)currentEpoch / TOTAL_EPOCHS;
-            alpha = 6.1 * Math.Pow(Math.E, -power);
+            V = (int)(6.1 * Math.Pow(Math.E, -power));
         }
 
         public Form1()
@@ -62,18 +62,53 @@ namespace Kohonen
 
                 moveNeurons();
 
-                this.Refresh();
-                await Task.Delay(1000);
-                this.Text = "Epoca " + currentEpoch;
+                Refresh();
+                await Task.Delay(200);
 
+                Text = "Epoca " + currentEpoch + "alpha =" + alpha;
                 currentEpoch++;
 
             } while (alpha > ALPHA_THRESHOLD);
         }
 
+        private (int row, int column) getMostSimilarNeuronIndexes((int X, int Y) point)
+        {
+            var similarityCalculator = new SimilarityCalculator();
+            double bestSimilarity = Double.MaxValue;
+
+            (int row, int col) mostSimilarNeuron = (0, 0);
+
+            for (int i = 0; i < neurons.GetLength(0); i++)
+            {
+                for (int j = 0; j < neurons.GetLength(0); j++)
+                {
+                    var neuron = neurons[i, j];
+                    var calculatedSimilarity = similarityCalculator.calculate(point, (neuron.X, neuron.Y));
+
+                    if (calculatedSimilarity < bestSimilarity)
+                    {
+                        bestSimilarity = calculatedSimilarity;
+                        mostSimilarNeuron = (i, j);
+                    }
+                }
+            }
+
+            return mostSimilarNeuron;
+        }
         private void moveNeurons()
         {
-            throw new NotImplementedException();
+            foreach (var point in points)
+            {
+                var mostSimilarNeuronIndexes = getMostSimilarNeuronIndexes(point);
+
+                var neighbours = (new NeighbourService(neurons)).neighbours(mostSimilarNeuronIndexes, V);
+
+                //update the position of all neighbour neurons INCLUDING the neuron itself
+                foreach (var neighbour in neighbours)
+                {
+                    neighbour.moveTowards(point, alpha);
+                }
+            }
         }
     }
 }

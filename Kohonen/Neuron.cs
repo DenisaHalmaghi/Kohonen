@@ -15,10 +15,10 @@ namespace Kohonen
             this.Y = Y;
         }
 
-        public void move((int X, int Y) point, int alpha)
+        public void moveTowards((int X, int Y) point, double alpha)
         {
-            X += alpha * point.X - X;
-            Y += alpha * point.Y - Y;
+            X = (int)(X + alpha * (point.X - X));
+            Y = (int)(Y + alpha * (point.Y - Y));
         }
 
     }

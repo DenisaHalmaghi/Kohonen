@@ -13,9 +13,9 @@ namespace Kohonen
             string[] paths = { Environment.CurrentDirectory, @"..\..\..\", path };
             filePath = Path.GetFullPath(Path.Combine(paths));
         }
-        public List<(int X, int Y, Color color)> readPoints()
+        public List<(int X, int Y)> readPoints()
         {
-            var points = new List<(int X, int Y, Color color)>();
+            var points = new List<(int X, int Y)>();
             using (StreamReader reader = new StreamReader(filePath))
             {
                 string line;
@@ -23,7 +23,7 @@ namespace Kohonen
                 while ((line = reader.ReadLine()) != null)
                 {
                     var parts = line.Split(" ");
-                    var point = (Int32.Parse(parts[0]), Int32.Parse(parts[1]), Color.Black);
+                    var point = (Int32.Parse(parts[0]), Int32.Parse(parts[1]));
                     points.Add(point);
                 }
             }
