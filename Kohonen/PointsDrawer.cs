@@ -15,7 +15,7 @@ namespace Kohonen
             this.canvas = control;
         }
 
-        public void draw(List<(int X, int Y)> points)
+        public void draw(List<Point> points)
         {
             canvas.Graphics.DrawRectangle(new Pen(Color.Black), 0, 0, Constants.MAX * 2 + 1, Constants.MAX * 2 + 1);
 

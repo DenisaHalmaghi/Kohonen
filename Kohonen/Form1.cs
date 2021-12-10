@@ -12,7 +12,7 @@ namespace Kohonen
 {
     public partial class Form1 : Form
     {
-        List<(int X, int Y)> points;
+        List<Point> points;
         Neuron[,] neurons;
         int currentEpoch = 0;
         const int NR_NEURONS = 11;
@@ -63,15 +63,15 @@ namespace Kohonen
                 moveNeurons();
 
                 Refresh();
-                await Task.Delay(200);
+                await Task.Delay(50);
 
-                Text = "Epoca " + currentEpoch + "alpha =" + alpha;
+                Text = "Epoca " + currentEpoch + ", alpha =" + alpha;
                 currentEpoch++;
 
             } while (alpha > ALPHA_THRESHOLD);
         }
 
-        private (int row, int column) getMostSimilarNeuronIndexes((int X, int Y) point)
+        private (int row, int column) getMostSimilarNeuronIndexes(Point point)
         {
             var similarityCalculator = new SimilarityCalculator();
             double bestSimilarity = Double.MaxValue;
@@ -83,7 +83,7 @@ namespace Kohonen
                 for (int j = 0; j < neurons.GetLength(0); j++)
                 {
                     var neuron = neurons[i, j];
-                    var calculatedSimilarity = similarityCalculator.calculate(point, (neuron.X, neuron.Y));
+                    var calculatedSimilarity = similarityCalculator.calculate(point, neuron);
 
                     if (calculatedSimilarity < bestSimilarity)
                     {

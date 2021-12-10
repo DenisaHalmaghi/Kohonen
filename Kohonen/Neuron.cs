@@ -15,7 +15,7 @@ namespace Kohonen
             this.Y = Y;
         }
 
-        public void moveTowards((int X, int Y) point, double alpha)
+        public void moveTowards(Point point, double alpha)
         {
             X = (int)(X + alpha * (point.X - X));
             Y = (int)(Y + alpha * (point.Y - Y));
